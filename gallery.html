@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cosmic Captures | Astronomy Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --deep-space: #0a0e17;
+            --nebula-blue: #4a3ffa;
+            --cosmic-purple: #8a2be2;
+            --star-yellow: #ffeb3b;
+            --martian-red: #ff6b6b;
+            --space-gray: #1e2538;
+            --neutron-star: #e0e0e0;
+            --comet: #50c8ff;
+        }
+        body {
+            background: var(--deep-space);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+            animation: shoot linear;
+        }
+        @keyframes shoot {
+            0% { transform: translateX(-100px) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(calc(100vh * var(--random))); opacity: 0; }
+        }
+        .background-parallax {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: 
+                radial-gradient(rgba(255,255,255,.2) 1px, transparent 3px),
+                radial-gradient(rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(rgba(255,255,255,.1) 1px, transparent 4px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--nebula-blue);
+            text-shadow: 0 0 10px var(--nebula-blue);
+            animation: pulsate 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        @keyframes pulsate {
+            0%, 100% { text-shadow: 0 0 10px var(--nebula-blue); }
+            50% { text-shadow: 0 0 20px var(--nebula-blue), 0 0 30px var(--cosmic-purple); }
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin: 0 15px;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+        .nav-links a:hover {
+            color: var(--nebula-blue);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--nebula-blue);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--nebula-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(74, 63, 250, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(74, 63, 250, 0.8), 0 0 30px rgba(138, 43, 226, 0.6); }
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin-bottom: 30px;
+            color: #bbbbbb;
+            line-height: 1.6;
+        }
+        .gallery-section {
+            padding: 50px 5%;
+            text-align: center;
+            flex-grow: 1;
+        }
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .gallery-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--nebula-blue);
+            color: white;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 5px 15px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px;
+            outline: none;
+            width: 200px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .search-box i {
+            color: var(--nebula-blue);
+        }
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sort-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            padding: 8px 15px;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .sort-select option {
+            background: var(--deep-space);
+        }
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+        .view-options button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .view-options button.active, .view-options button:hover {
+            background: var(--nebula-blue);
+        }
+        #image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: filter 0.3s;
+        }
+        .gallery-item:hover img {
+            filter: brightness(0.7);
+        }
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 63, 250, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            text-align: center;
+            padding: 10px;
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        .gallery-overlay h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        .gallery-overlay p {
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+        .gallery-overlay .tags {
+            font-size: 0.8rem;
+            color: #ffeb3b;
+            margin-top: 5px;
+        }
+        .gallery-item.list-view {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 15px;
+            background: var(--space-gray);
+            border-radius: 10px;
+            box-shadow: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .gallery-item.list-view:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+        }
+        .gallery-item.list-view .gallery-overlay {
+            position: static;
+            opacity: 1;
+            background: transparent;
+            text-align: left;
+            padding: 0;
+        }
+        .gallery-item.list-view img {
+            width: 150px;
+            height: 100px;
+            border-radius: 5px;
+        }
+        .gallery-item.list-view .gallery-info {
+            flex-grow: 1;
+        }
+        .gallery-item.list-view .tags {
+            display: none;
+        }
+        .gallery-item.list-view h4 {
+            font-size: 1.1rem;
+        }
+        .gallery-item.list-view p {
+            font-size: 0.8rem;
+        }
+        #image-gallery.list-view {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        footer {
+            background: rgba(10, 14, 23, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 40px 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: left;
+            gap: 30px;
+        }
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--nebula-blue);
+            text-decoration: none;
+            text-shadow: 0 0 5px rgba(74, 63, 250, 0.5);
+        }
+        .footer-column p {
+            font-size: 0.9rem;
+            color: #bbb;
+            margin-top: 15px;
+        }
+        .social-icons {
+            margin-top: 20px;
+        }
+        .social-icons a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .social-icons a:hover {
+            color: var(--comet);
+            transform: translateY(-3px);
+        }
+        .footer-column h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--cosmic-purple);
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-column ul li a:hover {
+            color: var(--comet);
+        }
+        .newsletter-form {
+            display: flex;
+            margin-top: 15px;
+        }
+        .newsletter-form input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px 0 0 5px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            outline: none;
+        }
+        .newsletter-form button {
+            padding: 10px 20px;
+            background: var(--nebula-blue);
+            border: none;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .newsletter-form button:hover {
+            background: var(--cosmic-purple);
+        }
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #777;
+        }
+        .rocket {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--martian-red), var(--star-yellow));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: rocketFly 4s ease-in-out infinite;
+        }
+        @keyframes rocketFly {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 101;
+        }
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: var(--comet);
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 14, 23, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 20px 0;
+                text-align: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 15px 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .gallery-filters, .sort-options, .view-options {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars"></div>
+    <div class="background-parallax"></div>
+    <nav>
+        <a href="index.html" class="logo">Cosmic<span>Vision</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="equipment.html">Equipment</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="telescope.html">Telescope History</a></li>
+        </ul>
+        <div class="hamburger">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </div>
+    </nav>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>My Cosmic Captures</h1>
+                <p>A collection of my favorite astrophotography images from galaxies to nebulae.</p>
+            </div>
+        </section>
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <div class="gallery-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="nebulae">Nebulae</button>
+                    <button class="filter-btn" data-filter="galaxies">Galaxies</button>
+                    <button class="filter-btn" data-filter="planets">Planets</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search images...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="sort-options">
+                    <select id="sort-select">
+                        <option value="date-asc">Date (Oldest)</option>
+                        <option value="date-desc">Date (Newest)</option>
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                    </select>
+                </div>
+                <div class="view-options">
+                    <button id="grid-view" class="active"><i class="fas fa-th-large"></i></button>
+                    <button id="list-view"><i class="fas fa-list"></i></button>
+                </div>
+            </div>
+            <div id="image-gallery">
+                <div class="gallery-item" data-category="nebulae" data-name="Orion Nebula" data-date="2023-01-15">
+                    <img src="https://cdn.pixabay.com/photo/2018/02/10/17/39/orion-nebula-3144148_1280.jpg" alt="Orion Nebula">
+                    <div class="gallery-overlay">
+                        <h4>Orion Nebula</h4>
+                        <p>A stellar nursery and one of the brightest nebulae in the night sky.</p>
+                        <span class="tags">#nebula #starformation</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="galaxies" data-name="Andromeda Galaxy" data-date="2022-11-20">
+                    <img src="https://cdn.mos.cms.futurecdn.net/jS8X4oe5zrxUWkrsh7Kry8-1200-80.jpg" alt="Andromeda Galaxy">
+                    <div class="gallery-overlay">
+                        <h4>Andromeda Galaxy</h4>
+                        <p>Our nearest major galactic neighbor, captured in a detailed long-exposure shot.</p>
+                        <span class="tags">#galaxy #andromeda</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="planets" data-name="Jupiter & Moons" data-date="2023-03-10">
+                    <img src="https://swiftmedia.s3.amazonaws.com/mountain.swiftcom.com/images/sites/8/2018/05/04152322/Jupiter-4-moons-092111-1240x879.jpg" alt="Jupiter">
+                    <div class="gallery-overlay">
+                        <h4>Jupiter & Moons</h4>
+                        <p>The great gas giant and its four largest Galilean moons.</p>
+                        <span class="tags">#planet #jupiter #solar-system</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="nebulae" data-name="Pillars of Creation" data-date="2023-02-05">
+                    <img src="https://i.redd.it/ah8e57w0wp151.jpg" alt="Pillars of Creation">
+                    <div class="gallery-overlay">
+                        <h4>Pillars of Creation</h4>
+                        <p>Iconic columns of interstellar gas and dust within the Eagle Nebula.</p>
+                        <span class="tags">#nebula #eagle</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <a href="index.html" class="footer-logo">Cosmic<span>Vision</span></a>
+                <p>Your portal to the universe. Sharing the beauty of the cosmos through astrophotography and passion.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="equipment.html">Equipment</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="telescope.html">Telescope History</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Galaxy Rd, Star City, Cosmos</p>
+                <p><i class="fas fa-envelope"></i> contact@cosmicvision.com</p>
+                <p><i class="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
+            </div>
+            <div class="footer-column">
+                <h4>Newsletter</h4>
+                <p>Stay up to date with our latest space adventures.</p>
+                <form action="#" class="newsletter-form">
+                    <input type="email" placeholder="Your Email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Cosmic Vision. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <div class="rocket" onclick="scrollToTop()">
+        <i class="fas fa-rocket"></i>
+    </div>
+<script>
+    document.addEventListener('mousemove', (e) => {
+        const parallaxBg = document.querySelector('.background-parallax');
+        if (parallaxBg) {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            parallaxBg.style.transform = `translate(${-x}px, ${-y}px)`;
+        }
+    });
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function createStars() {
+        const starsContainer = document.getElementById('stars');
+        const numberOfStars = 200;
+        for (let i = 0; i < numberOfStars; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            starsContainer.appendChild(star);
+        }
+    }
+
+    function createShootingStars() {
+        const container = document.getElementById('stars');
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                const duration = Math.random() * 2 + 2;
+                const randomY = Math.random();
+                shootingStar.style.setProperty('--random', randomY);
+                shootingStar.style.top = `${Math.random() * 50}%`;
+                shootingStar.style.width = `${Math.random() * 100 + 100}px`;
+                shootingStar.style.animationDuration = `${duration}s`;
+                container.appendChild(shootingStar);
+                setTimeout(() => container.removeChild(shootingStar), duration * 1000);
+            }
+        }, 3000);
+    }
+
+    window.onload = function() {
+        createStars();
+        createShootingStars();
+        document.querySelector('.rocket').addEventListener('click', scrollToTop);
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        let currentFilter = 'all';
+        let currentSort = 'date-desc';
+        let currentSearch = '';
+        const galleryContainer = document.getElementById('image-gallery');
+
+        // This is the new, corrected function
+        function updateGallery() {
+            const allItems = Array.from(galleryContainer.children);
+
+            allItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                const name = item.getAttribute('data-name');
+
+                const isFiltered = currentFilter === 'all' || category === currentFilter;
+                const isSearched = name.toLowerCase().includes(currentSearch.toLowerCase());
+
+                if (isFiltered && isSearched) {
+                    item.style.display = ''; // Show item
+                } else {
+                    item.style.display = 'none'; // Hide item
+                }
+            });
+
+            // Sorting logic (can be optimized but works for a small set)
+            const visibleItems = allItems.filter(item => item.style.display !== 'none');
+            visibleItems.sort((a, b) => {
+                const dateA = new Date(a.getAttribute('data-date'));
+                const dateB = new Date(b.getAttribute('data-date'));
+                const nameA = a.getAttribute('data-name');
+                const nameB = b.getAttribute('data-name');
+
+                if (currentSort === 'name-asc') {
+                    return nameA.localeCompare(nameB);
+                } else if (currentSort === 'name-desc') {
+                    return nameB.localeCompare(nameA);
+                } else if (currentSort === 'date-asc') {
+                    return dateA - dateB;
+                } else if (currentSort === 'date-desc') {
+                    return dateB - dateA;
+                }
+                return 0;
+            }).forEach(item => galleryContainer.appendChild(item)); // Re-append sorted elements
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.getAttribute('data-filter');
+                updateGallery();
+            });
+        });
+
+        document.getElementById('sort-select').addEventListener('change', function() {
+            currentSort = this.value;
+            updateGallery();
+        });
+
+        document.getElementById('search-input').addEventListener('keyup', function() {
+            currentSearch = this.value;
+            updateGallery();
+        });
+
+        document.getElementById('grid-view').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('list-view').classList.remove('active');
+            document.getElementById('image-gallery').classList.remove('list-view');
+        });
+
+        document.getElementById('list-view').addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('grid-view').classList.remove('active');
+            document.getElementById('image-gallery').classList.add('list-view');
+        });
+
+        updateGallery();
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telescope Building History | Astronomy Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --deep-space: #0a0e17;
+            --nebula-blue: #4a3ffa;
+            --cosmic-purple: #8a2be2;
+            --star-yellow: #ffeb3b;
+            --martian-red: #ff6b6b;
+            --space-gray: #1e2538;
+            --neutron-star: #e0e0e0;
+            --comet: #50c8ff;
+        }
+        body {
+            background: var(--deep-space);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+            animation: shoot linear;
+        }
+        @keyframes shoot {
+            0% { transform: translateX(-100px) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(calc(100vh * var(--random))); opacity: 0; }
+        }
+        .background-parallax {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: 
+                radial-gradient(rgba(255,255,255,.2) 1px, transparent 3px),
+                radial-gradient(rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(rgba(255,255,255,.1) 1px, transparent 4px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--nebula-blue);
+            text-shadow: 0 0 10px var(--nebula-blue);
+            animation: pulsate 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        @keyframes pulsate {
+            0%, 100% { text-shadow: 0 0 10px var(--nebula-blue); }
+            50% { text-shadow: 0 0 20px var(--nebula-blue), 0 0 30px var(--cosmic-purple); }
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin: 0 15px;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+        .nav-links a:hover {
+            color: var(--nebula-blue);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--nebula-blue);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--nebula-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(74, 63, 250, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(74, 63, 250, 0.8), 0 0 30px rgba(138, 43, 226, 0.6); }
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin-bottom: 30px;
+            color: #bbbbbb;
+            line-height: 1.6;
+        }
+        .telescope-history {
+            padding: 80px 5%;
+            text-align: center;
+            background: rgba(10, 14, 23, 0.7);
+            flex-grow: 1;
+        }
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--nebula-blue);
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--nebula-blue), var(--cosmic-purple));
+        }
+        .section-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: #bbbbbb;
+            line-height: 1.6;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--nebula-blue);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .timeline-item:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -14px;
+            background: var(--cosmic-purple);
+            border: 4px solid var(--nebula-blue);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-left {
+            left: 0;
+        }
+        .timeline-right {
+            left: 50%;
+        }
+        .timeline-right::after {
+            left: -11px;
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background: var(--space-gray);
+            position: relative;
+            border-radius: 6px;
+        }
+        .timeline-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--comet);
+            margin-bottom: 10px;
+        }
+        .timeline-content small {
+            color: var(--neutron-star);
+        }
+        .timeline-content p {
+            margin-top: 15px;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        .calculator-section {
+            padding: 80px 5%;
+            text-align: center;
+            background: var(--space-gray);
+        }
+        .calculator-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .calculator-container h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--nebula-blue);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .calculator-container button {
+            padding: 10px 25px;
+            background: var(--comet);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .calculator-container button:hover {
+            background: var(--star-yellow);
+            transform: translateY(-3px);
+        }
+        #result {
+            margin-top: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--star-yellow);
+            min-height: 30px;
+        }
+        .faq-section {
+            padding: 80px 5%;
+            text-align: center;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: var(--space-gray);
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .faq-item h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            padding: 20px;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .faq-item h4:hover {
+            color: var(--comet);
+        }
+        .faq-item h4::after {
+            content: '+';
+            position: absolute;
+            right: 20px;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .faq-item h4.active::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+        .faq-content {
+            padding: 0 20px;
+            display: none;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .faq-content p {
+            padding: 10px 0 20px;
+            color: #bbb;
+        }
+        footer {
+            background: rgba(10, 14, 23, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 40px 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: left;
+            gap: 30px;
+        }
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--nebula-blue);
+            text-decoration: none;
+            text-shadow: 0 0 5px rgba(74, 63, 250, 0.5);
+        }
+        .footer-column p {
+            font-size: 0.9rem;
+            color: #bbb;
+            margin-top: 15px;
+        }
+        .social-icons {
+            margin-top: 20px;
+        }
+        .social-icons a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .social-icons a:hover {
+            color: var(--comet);
+            transform: translateY(-3px);
+        }
+        .footer-column h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--cosmic-purple);
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-column ul li a:hover {
+            color: var(--comet);
+        }
+        .newsletter-form {
+            display: flex;
+            margin-top: 15px;
+        }
+        .newsletter-form input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px 0 0 5px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            outline: none;
+        }
+        .newsletter-form button {
+            padding: 10px 20px;
+            background: var(--nebula-blue);
+            border: none;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .newsletter-form button:hover {
+            background: var(--cosmic-purple);
+        }
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #777;
+        }
+        .rocket {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--martian-red), var(--star-yellow));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: rocketFly 4s ease-in-out infinite;
+        }
+        @keyframes rocketFly {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 101;
+        }
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: var(--comet);
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 14, 23, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 20px 0;
+                text-align: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 15px 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 20px;
+            }
+            .timeline-item::after {
+                left: 18px;
+            }
+            .timeline-right {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars"></div>
+    <div class="background-parallax"></div>
+    <nav>
+        <a href="index.html" class="logo">Cosmic<span>Vision</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="equipment.html">Equipment</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="telescope.html">Telescope History</a></li>
+        </ul>
+        <div class="hamburger">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </div>
+    </nav>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Telescope Building History</h1>
+                <p>A timeline of my journey from a beginner to building my own cosmic tools.</p>
+            </div>
+        </section>
+        <section class="telescope-history">
+            <h2 class="section-title">A Journey of Discovery</h2>
+            <p class="section-subtitle">Building your own telescope is a rewarding challenge. Here's a look at my progression and the key milestones along the way.</p>
+            <div class="timeline">
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h3>First Steps (2015)</h3>
+                        <small>The First Telescope</small>
+                        <p>My journey began with a simple 4.5-inch Newtonian reflector. I learned the basics of mirror grinding and polishing, a truly hands-on experience that cemented my passion for the hobby.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h3>Advanced Design (2018)</h3>
+                        <small>The 8-inch Dobsonian</small>
+                        <p>I graduated to a larger, more complex build. This 8-inch Dobsonian telescope was a massive leap, requiring precision woodworking for the mount and careful alignment of the optics.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h3>Digital Integration (2021)</h3>
+                        <small>Automated Go-To Mount</small>
+                        <p>To prepare for astrophotography, I built a custom Go-To mount. This was a deep dive into electronics and programming, allowing me to automatically track and find celestial objects with a press of a button.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h3>Future Projects (2024+)</h3>
+                        <small>The 12-inch Truss-Tube</small>
+                        <p>My next project is a portable 12-inch truss-tube Dobsonian. It will combine the best of my previous builds: a large aperture for stunning views and a collapsible design for portability.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="calculator-section">
+            <div class="calculator-container">
+                <h3>Telescope Magnification Calculator</h3>
+                <p>Calculate your telescope's magnification with a given eyepiece.</p>
+                <div class="form-group">
+                    <label for="focal-length">Telescope Focal Length (mm)</label>
+                    <input type="number" id="focal-length" placeholder="e.g., 1000">
+                </div>
+                <div class="form-group">
+                    <label for="eyepiece-length">Eyepiece Focal Length (mm)</label>
+                    <input type="number" id="eyepiece-length" placeholder="e.g., 25">
+                </div>
+                <button onclick="calculateMagnification()">Calculate Magnification</button>
+                <p id="result">Magnification: 0x</p>
+            </div>
+        </section>
+        <section class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h4>What is the best type of telescope for a beginner?</h4>
+                    <div class="faq-content">
+                        <p>A Dobsonian reflector is often recommended for beginners. It's affordable, easy to set up, and offers a large aperture for great views of deep-sky objects.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h4>How do you take pictures of nebulae and galaxies?</h4>
+                    <div class="faq-content">
+                        <p>Deep-sky astrophotography requires a camera, a stable equatorial mount to track the stars, and image processing software to stack multiple long-exposure shots.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h4>What is "light pollution" and how can I deal with it?</h4>
+                    <div class="faq-content">
+                        <p>Light pollution is excess artificial light that obscures faint celestial objects. You can combat it by using light pollution filters or by traveling to a dark-sky location away from cities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <a href="index.html" class="footer-logo">Cosmic<span>Vision</span></a>
+                <p>Your portal to the universe. Sharing the beauty of the cosmos through astrophotography and passion.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="equipment.html">Equipment</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="telescope.html">Telescope History</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Galaxy Rd, Star City, Cosmos</p>
+                <p><i class="fas fa-envelope"></i> contact@cosmicvision.com</p>
+                <p><i class="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
+            </div>
+            <div class="footer-column">
+                <h4>Newsletter</h4>
+                <p>Stay up to date with our latest space adventures.</p>
+                <form action="#" class="newsletter-form">
+                    <input type="email" placeholder="Your Email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Cosmic Vision. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <div class="rocket" onclick="scrollToTop()">
+        <i class="fas fa-rocket"></i>
+    </div>
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const parallaxBg = document.querySelector('.background-parallax');
+            if (parallaxBg) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                parallaxBg.style.transform = `translate(${-x}px, ${-y}px)`;
+            }
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 200;
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        function createShootingStars() {
+            const container = document.getElementById('stars');
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const shootingStar = document.createElement('div');
+                    shootingStar.classList.add('shooting-star');
+                    const duration = Math.random() * 2 + 2;
+                    const randomY = Math.random();
+                    shootingStar.style.setProperty('--random', randomY);
+                    shootingStar.style.top = `${Math.random() * 50}%`;
+                    shootingStar.style.width = `${Math.random() * 100 + 100}px`;
+                    shootingStar.style.animationDuration = `${duration}s`;
+                    container.appendChild(shootingStar);
+                    setTimeout(() => container.removeChild(shootingStar), duration * 1000);
+                }
+            }, 3000);
+        }
+        function calculateMagnification() {
+            const focalLength = document.getElementById('focal-length').value;
+            const eyepieceLength = document.getElementById('eyepiece-length').value;
+            const result = document.getElementById('result');
+            if (focalLength && eyepieceLength && eyepieceLength > 0) {
+                const magnification = focalLength / eyepieceLength;
+                result.textContent = `Magnification: ${magnification.toFixed(2)}x`;
+            } else {
+                result.textContent = 'Please enter valid values.';
+            }
+        }
+        function setupFaqToggles() {
+            const faqItems = document.querySelectorAll('.faq-item h4');
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const content = item.nextElementSibling;
+                    const isActive = item.classList.toggle('active');
+                    content.style.maxHeight = isActive ? content.scrollHeight + "px" : null;
+                });
+            });
+        }
+        window.onload = function() {
+            createStars();
+            createShootingStars();
+            document.querySelector('.rocket').addEventListener('click', scrollToTop);
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('active');
+                });
+            });
+            setupFaqToggles();
+        };
+    </script>
+</body>
+</html>
